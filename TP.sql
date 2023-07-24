@@ -1550,6 +1550,44 @@ COMMENT ON COLUMN "public"."tp_notification_members"."id" IS 'uuid';
 COMMENT ON COLUMN "public"."tp_notification_members"."tp_notification_groups_id" IS '关联tp_notification_groups表id';
 COMMENT ON COLUMN "public"."tp_notification_members"."users_id" IS '关联users表id';
 
+
+CREATE TABLE "public"."tp_notification_history" (
+  "id" varchar(36) COLLATE "pg_catalog"."default",
+  "send_time" int4,
+  "send_content" text COLLATE "pg_catalog"."default",
+  "send_target" varchar(255) COLLATE "pg_catalog"."default",
+  "send_result" int2,
+  "notification_type" int2,
+  "tenant_id" varchar(255) COLLATE "pg_catalog"."default"
+)
+;
+ALTER TABLE "public"."tp_notification_history" OWNER TO "postgres";
+COMMENT ON COLUMN "public"."tp_notification_history"."id" IS 'Uuid
+';
+COMMENT ON COLUMN "public"."tp_notification_history"."send_time" IS '时间戳
+';
+COMMENT ON COLUMN "public"."tp_notification_history"."send_content" IS '发送内容';
+COMMENT ON COLUMN "public"."tp_notification_history"."send_target" IS '发送目标';
+COMMENT ON COLUMN "public"."tp_notification_history"."send_result" IS '发送结果（1成功 2失败）';
+COMMENT ON COLUMN "public"."tp_notification_history"."notification_type" IS '通知类型';
+COMMENT ON COLUMN "public"."tp_notification_history"."tenant_id" IS '租户ID';
+
+
+
+CREATE TABLE "public"."third_party_cloud_services_config" (
+  "id" varchar(36) COLLATE "pg_catalog"."default",
+  "notice_type" int4,
+  "config" varchar(255) COLLATE "pg_catalog"."default",
+  "status" int4
+)
+;
+ALTER TABLE "public"."third_party_cloud_services_config" OWNER TO "postgres";
+COMMENT ON COLUMN "public"."third_party_cloud_services_config"."id" IS 'Uuid
+';
+COMMENT ON COLUMN "public"."third_party_cloud_services_config"."notice_type" IS '通知类型（1:短信 2:邮件 3:电话）';
+COMMENT ON COLUMN "public"."third_party_cloud_services_config"."config" IS '配置信息';
+COMMENT ON COLUMN "public"."third_party_cloud_services_config"."status" IS '开关（1：启用 2：关闭）';
+
 INSERT INTO public.users
 (id, created_at, updated_at, enabled, additional_info, authority, customer_id, email, "password", "name", mobile, remark, tenant_id)
 VALUES('33b2336c-9e9a-86e5-101e-4864e6b7724b', 1684309245, 1684309245, '1', '', 'TENANT_ADMIN', '', 'tenant@tenant.cn', '$2a$04$.O6d.vy.yOcYrqaQ2zkpAuApP4aDISxGdzlXol3NAR4vmZKex6jam', '租户', '13211111111', '', 'e481b0c0');
@@ -1564,3 +1602,173 @@ WHERE id='3f4348b0-f39d-ec42-14b4-623cbeadb12f';
 INSERT INTO public.tp_function (id, function_name, menu_id, "path", "name", component, title, icon, "type", function_code, parent_id, sort, tenant_id, sys_flag) VALUES('e9a36fd0-fe8a-896b-713c-c809cef6128e', '', NULL, '', 'Alarm', '', '告警', 'flaticon2-warning', '0', '', '0', 950, '', '');
 UPDATE public.tp_function SET function_name='', menu_id=NULL, "path"='/alarm/list', "name"='AlarmInformation', component='/pages/alarm/AlarmIndex.vue', title='COMMON.WARNINFO', icon='flaticon2-warning', "type"='1', function_code='', parent_id='e9a36fd0-fe8a-896b-713c-c809cef6128e', sort=999, tenant_id='', sys_flag='' WHERE id='c17a3b9e-bd1f-2f10-4c65-d2ae7030087b';
 UPDATE public.tp_function SET function_name='', menu_id=NULL, "path"='/notice/index', "name"='Notice', component='/pages/notice/index', title='COMMON.NOTICE', icon='flaticon-upload-1', "type"='1', function_code='', parent_id='e9a36fd0-fe8a-896b-713c-c809cef6128e', sort=980, tenant_id='', sys_flag='' WHERE id='7b30818a-4c58-ae4a-9c13-4a00cf3b61c2';
+
+--- add
+CREATE TABLE public.tp_local_vis_plugin (
+	id varchar(36) NOT NULL,
+	tenant_id varchar(36) NOT NULL,
+	plugin_url varchar(500) NOT NULL,
+	create_at int8 NULL,
+	remark varchar(255) NULL
+);
+
+-- public.tp_data_services_config definition
+
+-- Drop table
+
+-- DROP TABLE public.tp_data_services_config;
+
+-- public.tp_data_services_config definition
+
+-- Drop table
+
+-- DROP TABLE public.tp_data_services_config;
+
+CREATE TABLE public.tp_data_services_config (
+	id varchar(36) NOT NULL,
+	"name" varchar(50) NULL, -- 名称
+	app_key varchar(500) NULL, -- key
+	secret_key varchar(500) NULL, -- 密钥
+	signature_mode varchar(50) NULL, -- 签名方式：MD5 or SHA256
+	ip_whitelist varchar(500) NULL, -- ip白名单
+	data_sql varchar(5000) NULL, -- sql语句
+	api_flag varchar(2) NULL, -- 支持接口标志 0-http接口 1-http和ws接口
+	time_interval int8 NULL, --  ws接口推送数据间隔（s）
+	enable_flag varchar(1) NULL, -- 启停标志
+	description varchar(500) NULL, -- 描述
+	created_at int8 NULL,
+	remark varchar(500) NULL,
+	CONSTRAINT tp_data_services_config_pk PRIMARY KEY (id)
+);
+
+-- Column comments
+
+COMMENT ON COLUMN public.tp_data_services_config."name" IS '名称';
+COMMENT ON COLUMN public.tp_data_services_config.app_key IS 'key';
+COMMENT ON COLUMN public.tp_data_services_config.secret_key IS '密钥';
+COMMENT ON COLUMN public.tp_data_services_config.signature_mode IS '签名方式：MD5 or SHA256';
+COMMENT ON COLUMN public.tp_data_services_config.ip_whitelist IS 'ip白名单';
+COMMENT ON COLUMN public.tp_data_services_config.data_sql IS 'sql语句';
+COMMENT ON COLUMN public.tp_data_services_config.api_flag IS '支持接口标志 0-http接口 1-http和ws接口';
+COMMENT ON COLUMN public.tp_data_services_config.time_interval IS '	ws接口推送数据间隔（s）';
+COMMENT ON COLUMN public.tp_data_services_config.enable_flag IS '启停标志';
+COMMENT ON COLUMN public.tp_data_services_config.description IS '描述';
+
+UPDATE tp_function
+SET function_name='', menu_id=NULL, "path"='', name='RuleEngine', component='', title='COMMON.RULEENGINE', icon='flaticon2-gift-1', "type"='0', function_code='', parent_id='0', sort=920, tenant_id='', sys_flag='2', "describe"='规则引擎目录'
+WHERE id='7cac14a0-0ff2-57d9-5465-597760bd2cb1';
+UPDATE tp_function
+SET function_name='', menu_id=NULL, "path"='/access_engine/index', name='AccessEngine', component='/pages/access-engine/AccessEngineIndex.vue', title='COMMON.NETWORKCOMPONENTS', icon='flaticon-upload-1', "type"='1', function_code='', parent_id='7cac14a0-0ff2-57d9-5465-597760bd2cb1', sort=999, tenant_id='', sys_flag='1', "describe"='规则引擎菜单'
+WHERE id='a8ebb8af-adab-90fa-a553-49667370fc5f';
+
+
+-- ----------------------------
+-- Table structure for tp_api
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."tp_api";
+CREATE TABLE "public"."tp_api" (
+                                   "id" varchar(36) COLLATE "pg_catalog"."default" NOT NULL,
+                                   "name" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
+                                   "url" varchar(500) COLLATE "pg_catalog"."default" NOT NULL,
+                                   "api_type" varchar(20) COLLATE "pg_catalog"."default" NOT NULL,
+                                   "service_type" varchar(2) COLLATE "pg_catalog"."default",
+                                   "remark" varchar(500) COLLATE "pg_catalog"."default"
+)
+;
+COMMENT ON COLUMN "public"."tp_api"."name" IS '接口名称';
+COMMENT ON COLUMN "public"."tp_api"."url" IS '接口地址';
+COMMENT ON COLUMN "public"."tp_api"."api_type" IS '接口类型(http socket)';
+COMMENT ON COLUMN "public"."tp_api"."service_type" IS '服务类型(1-OpenApi)';
+COMMENT ON COLUMN "public"."tp_api"."remark" IS '描述';
+COMMENT ON TABLE "public"."tp_api" IS 'api接口表';
+
+ALTER TABLE "public"."tp_api" ADD CONSTRAINT "tp_api_pk" PRIMARY KEY ("id");
+
+
+-- ----------------------------
+-- Table structure for tp_openapi_auth
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."tp_openapi_auth";
+CREATE TABLE "public"."tp_openapi_auth" (
+                                            "id" varchar(36) COLLATE "pg_catalog"."default" NOT NULL,
+                                            "tenant_id" varchar(36) COLLATE "pg_catalog"."default" NOT NULL,
+                                            "name" varchar(50) COLLATE "pg_catalog"."default" NOT NULL,
+                                            "app_key" varchar(500) COLLATE "pg_catalog"."default" NOT NULL,
+                                            "secret_key" varchar(500) COLLATE "pg_catalog"."default" NOT NULL,
+                                            "signature_mode" varchar(50) COLLATE "pg_catalog"."default",
+                                            "ip_whitelist" varchar(500) COLLATE "pg_catalog"."default",
+                                            "device_access_scope" varchar(2) COLLATE "pg_catalog"."default",
+                                            "api_access_scope" varchar(2) COLLATE "pg_catalog"."default",
+                                            "description" varchar(500) COLLATE "pg_catalog"."default",
+                                            "created_at" int8,
+                                            "remark" varchar(500) COLLATE "pg_catalog"."default"
+)
+;
+COMMENT ON COLUMN "public"."tp_openapi_auth"."tenant_id" IS '租户id';
+COMMENT ON COLUMN "public"."tp_openapi_auth"."name" IS '名称';
+COMMENT ON COLUMN "public"."tp_openapi_auth"."app_key" IS 'keyy';
+COMMENT ON COLUMN "public"."tp_openapi_auth"."secret_key" IS '密钥';
+COMMENT ON COLUMN "public"."tp_openapi_auth"."signature_mode" IS '签名方式 MD5 SHA256';
+COMMENT ON COLUMN "public"."tp_openapi_auth"."ip_whitelist" IS 'ip白名单';
+COMMENT ON COLUMN "public"."tp_openapi_auth"."device_access_scope" IS '设备访问范围';
+COMMENT ON COLUMN "public"."tp_openapi_auth"."api_access_scope" IS '接口访问范围';
+COMMENT ON COLUMN "public"."tp_openapi_auth"."description" IS '描述';
+COMMENT ON COLUMN "public"."tp_openapi_auth"."remark" IS '备注';
+
+-- ----------------------------
+-- Primary Key structure for table tp_openapi_auth
+-- ----------------------------
+ALTER TABLE "public"."tp_openapi_auth" ADD CONSTRAINT "tp_openapi_auth_pk" PRIMARY KEY ("id");
+
+
+-- ----------------------------
+-- Table structure for tp_r_openapi_auth_api
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."tp_r_openapi_auth_api";
+CREATE TABLE "public"."tp_r_openapi_auth_api" (
+                                                  "id" varchar(36) COLLATE "pg_catalog"."default" NOT NULL,
+                                                  "tp_openapi_auth_id" varchar(36) COLLATE "pg_catalog"."default" NOT NULL,
+                                                  "tp_api_id" varchar(36) COLLATE "pg_catalog"."default"
+)
+;
+COMMENT ON TABLE "public"."tp_r_openapi_auth_api" IS 'OpenApi授权和接口关系表';
+
+-- ----------------------------
+-- Primary Key structure for table tp_r_openapi_auth_api
+-- ----------------------------
+ALTER TABLE "public"."tp_r_openapi_auth_api" ADD CONSTRAINT "tp_r_openapi_auth_api_pk" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Foreign Keys structure for table tp_r_openapi_auth_api
+-- ----------------------------
+ALTER TABLE "public"."tp_r_openapi_auth_api" ADD CONSTRAINT "tp_r_openapi_auth_api_tp_openapi_auth_id_fk" FOREIGN KEY ("tp_openapi_auth_id") REFERENCES "public"."tp_openapi_auth" ("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+
+-- ----------------------------
+-- Table structure for tp_r_openapi_auth_device
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."tp_r_openapi_auth_device";
+CREATE TABLE "public"."tp_r_openapi_auth_device" (
+                                                     "id" varchar(36) COLLATE "pg_catalog"."default" NOT NULL,
+                                                     "tp_openapi_auth_id" varchar(36) COLLATE "pg_catalog"."default" NOT NULL,
+                                                     "device_id" varchar(36) COLLATE "pg_catalog"."default" NOT NULL
+)
+;
+COMMENT ON TABLE "public"."tp_r_openapi_auth_device" IS 'OpenApi授权和设备关系表';
+
+-- ----------------------------
+-- Primary Key structure for table tp_r_openapi_auth_device
+-- ----------------------------
+ALTER TABLE "public"."tp_r_openapi_auth_device" ADD CONSTRAINT "tp_r_openapi_auth_device_pk" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Foreign Keys structure for table tp_r_openapi_auth_device
+-- ----------------------------
+ALTER TABLE "public"."tp_r_openapi_auth_device" ADD CONSTRAINT "tp_r_openapi_auth_api_tp_openapi_auth_id_fk" FOREIGN KEY ("tp_openapi_auth_id") REFERENCES "public"."tp_openapi_auth" ("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+
+INSERT INTO public.tp_function (id, function_name, menu_id, "path", "name", component, title, icon, "type", function_code, parent_id, sort, tenant_id, sys_flag, "describe") VALUES('bcbb4d09-7918-6b6c-4721-cfd41fa7dca0', '', NULL, '/noticeList/index', 'NoticeList', '/pages/noticeList/index', 'COMMON.NOTICERECORD', 'flaticon-upload-1', '1', '', 'e9a36fd0-fe8a-896b-713c-c809cef6128e', 979, '', '0', '');
+
+INSERT INTO public.tp_function (id, function_name, menu_id, "path", "name", component, title, icon, "type", function_code, parent_id, sort, tenant_id, sys_flag, "describe") VALUES('e21c59aa-cb88-84f6-bbec-784cc263ad0b', '', NULL, '', 'DataService', '', '数据服务', 'flaticon-open-box', '0', '', '0', 915, '', '2', '数据服务目录');
+INSERT INTO public.tp_function (id, function_name, menu_id, "path", "name", component, title, icon, "type", function_code, parent_id, sort, tenant_id, sys_flag, "describe") VALUES('b8eb4f39-fa5e-292f-894d-34877a7424b0', '', NULL, '/dataService/dataSetService/index', 'DataSetService', '/pages/dataService/dataSetService/index', 'MENU.DATASETSERVICE', 'flaticon-upload-1', '1', '', 'e21c59aa-cb88-84f6-bbec-784cc263ad0b', 965, '', '1', '');
+INSERT INTO public.tp_function (id, function_name, menu_id, "path", "name", component, title, icon, "type", function_code, parent_id, sort, tenant_id, sys_flag, "describe") VALUES('77fb6c53-23b6-c6e5-6f10-3eb7823f187c', '', NULL, '/noticeservices/index', ' NoticeService', '/pages/system/noticeservices/index', 'COMMON.NOTICESERVICES', 'flaticon-upload-1', '1', '', '4f2791e5-3c13-7249-c25f-77f6f787f574', 999, '', '1', '');
+INSERT INTO public.tp_function (id, function_name, menu_id, "path", "name", component, title, icon, "type", function_code, parent_id, sort, tenant_id, sys_flag, "describe") VALUES('813dfcd3-7090-75a5-eb73-6e7035c6e74a', '', NULL, '/datagateway/index', 'DataGateway', '/pages/datagateway/index.vue', '数据网关', 'flatixon2-gear', '1', '', 'e21c59aa-cb88-84f6-bbec-784cc263ad0b', 996, '', '0', '');

@@ -18,6 +18,7 @@ require (
 	github.com/fwhezfwhez/tcpx v0.0.0-20210320021234-0c5332cf59e0
 	github.com/go-basic/uuid v1.0.0
 	github.com/gorilla/websocket v1.5.0
+	github.com/howeyc/crc16 v0.0.0-20171223171357-2b2a61e366a6
 	github.com/lib/pq v1.10.7
 	github.com/mintance/go-uniqid v0.0.0-20180517195806-49cb885aad99
 	github.com/panjf2000/ants v1.2.1
@@ -25,6 +26,7 @@ require (
 	github.com/spf13/viper v1.15.0
 	github.com/xuri/excelize/v2 v2.4.1
 	golang.org/x/crypto v0.8.0
+	google.golang.org/grpc v1.52.0
 	gorm.io/driver/postgres v1.3.4
 	gorm.io/gorm v1.23.4
 )
@@ -56,7 +58,10 @@ require (
 	github.com/remyoudompheng/bigfft v0.0.0-20200410134404-eec4a21b6bb0 // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/stretchr/testify v1.8.2 // indirect
+	github.com/thinkeridea/go-extend v1.3.2 // indirect
 	github.com/tjfoc/gmsm v1.3.2 // indirect
+	google.golang.org/genproto v0.0.0-20221227171554-f9683d7f8bef // indirect
+	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.3.0 // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect
 	gopkg.in/sourcemap.v1 v1.0.5 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
@@ -121,7 +126,7 @@ require (
 	golang.org/x/net v0.9.0 // indirect
 	golang.org/x/sys v0.7.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
-	google.golang.org/protobuf v1.30.0 // indirect
+	google.golang.org/protobuf v1.30.0
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/redis.v5 v5.2.9
